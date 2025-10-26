@@ -1,18 +1,44 @@
 import React from 'react';
-import { cn } from '../../lib/utils.js';
+import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-export const Checkbox = React.forwardRef(({ className, ...props }, ref) => {
-  return (
-    <input
-      ref={ref}
-      type="checkbox"
-      className={cn(
-        'peer h-5 w-5 rounded-md border border-slate-600 bg-slate-900 text-brand-400 ring-offset-slate-950 transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
-        className
-      )}
-      {...props}
-    />
-  );
-});
+const Checkbox = React.forwardRef(({ className, ...props }, ref) => (
+  <CheckboxPrimitive.Root
+    ref={ref}
+    className={cn(
+      'peer h-5 w-5 shrink-0 rounded border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
+      className
+    )}
+    {...props}
+  >
+    <CheckboxPrimitive.Indicator
+      className={cn('flex items-center justify-center text-current')}
+    >
+      <Check className="h-4 w-4" />
+    </CheckboxPrimitive.Indicator>
+  </CheckboxPrimitive.Root>
+));
 
-Checkbox.displayName = 'Checkbox';
+Checkbox.displayName = CheckboxPrimitive.Root.displayName;
+
+export { Checkbox };
+
+// import React from 'react';
+// import { cn } from '../../lib/utils.js';
+
+// export const Checkbox = React.forwardRef(({ className, ...props }, ref) => {
+//   return (
+//     <input
+//       ref={ref}
+//       type="checkbox"
+//       className={cn(
+//         'peer h-5 w-5 rounded-md border border-slate-600 bg-slate-900 text-brand-400 ring-offset-slate-950 transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
+//         className
+//       )}
+//       {...props}
+//     />
+//   );
+// });
+
+// Checkbox.displayName = 'Checkbox';

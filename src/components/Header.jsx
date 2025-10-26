@@ -1,32 +1,28 @@
 import React from 'react';
-import { Button } from './ui/button.jsx';
+import { motion } from 'framer-motion';
+import { Settings } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import logo from '@/images/logo.png'; // ou caminho relativo ../assets/logo.png
+const Header = ({
+  onSettingsClick
+}) => {
+  return <motion.header initial={{
+    y: -100
+  }} animate={{
+    y: 0
+  }} className="glass-effect border-b border-white/10 sticky top-0 z-50">
+    <div className="container mx-auto px-4 py-4 flex items-center justify-between max-w-7xl">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center p-0 overflow-hidden">
+          <img src={logo} alt="Allerto Logo" className="w-full h-full object-cover" data-edit-id="src/components/Header.jsx:16:13" />
+        </div>
+        <span className="text-xl font-bold gradient-text">Allerto</span>
+      </div>
 
-const Header = ({ onAddMonitor }) => {
-  return (
-    <header className="flex flex-wrap items-center justify-between gap-6">
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-brand-200">
-          <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-500/20 text-xl text-brand-200">
-            AH
-          </span>
-          Allerto Host
-        </div>
-        <h1 className="text-3xl font-semibold text-white sm:text-4xl">Painel de monitoramento inteligente</h1>
-        <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
-          Tenha visibilidade completa dos mercados esportivos, automatize gatilhos personalizados e entregue alertas
-          de alta qualidade aos seus clientes.
-        </p>
-      </div>
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs text-emerald-200">
-          Uptime em tempo real: 99.982%
-        </div>
-        <Button size="lg" onClick={onAddMonitor}>
-          + Novo monitoramento
-        </Button>
-      </div>
-    </header>
-  );
+      <Button variant="ghost" size="icon" onClick={onSettingsClick} className="hover:bg-white/10">
+        <Settings className="w-5 h-5" />
+      </Button>
+    </div>
+  </motion.header>;
 };
-
 export default Header;

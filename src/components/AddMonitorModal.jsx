@@ -1,99 +1,164 @@
 import React, { useState } from 'react';
-import { Button } from './ui/button.jsx';
-import { Input } from './ui/input.jsx';
-import { Label } from './ui/label.jsx';
-import { useToast } from './ui/use-toast.js';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Package, TrendingUp, Wifi, Activity } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from '@/components/ui/use-toast';
 
-const createInitialState = () => ({
-  match: '',
-  market: '',
-  threshold: ''
-});
+const AddMonitorModal = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    type: 'package',
+    key: '',
+  });
 
-const AddMonitorModal = ({ open, onClose }) => {
-  const [formState, setFormState] = useState(() => createInitialState());
-  const { toast } = useToast();
+  const monitorTypes = [
+    { id: 'package', label: 'Pedido/Rastreio', icon: Package },
+    { id: 'betting', label: 'Aposta Esportiva', icon: TrendingUp },
+    { id: 'connection', label: 'Conexão/Wi-Fi', icon: Wifi },
+    { id: 'other', label: 'Outro', icon: Activity },
+  ];
 
-  if (!open) {
-    return null;
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.key) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Preencha todos os campos para continuar.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
-  };
+    const newMonitor = {
+      id: Date.now().toString(),
+      ...formData,
+      status: 'active',
+      createdAt: new Date().toISOString(),
+    };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+    const monitors = JSON.parse(localStorage.getItem('allerto_monitors') || '[]');
+    monitors.push(newMonitor);
+    localStorage.setItem('allerto_monitors', JSON.stringify(monitors));
+
+    const newAlert = {
+      id: Date.now().toString(),
+      type: formData.type,
+      title: 'Novo monitor adicionado',
+      message: `${formData.name} está sendo monitorado`,
+      timestamp: new Date().toISOString(),
+    };
+
+    const alerts = JSON.parse(localStorage.getItem('allerto_alerts') || '[]');
+    alerts.unshift(newAlert);
+    localStorage.setItem('allerto_alerts', JSON.stringify(alerts));
+
     toast({
-      title: 'Monitor criado',
-      description: `Agora acompanhando ${formState.match || 'um novo evento esportivo'}.`,
-      variant: 'success'
+      title: "Monitor adicionado!",
+      description: "O monitoramento foi configurado com sucesso.",
     });
-    setFormState(createInitialState());
-    onClose?.();
+
+    setFormData({ name: '', type: 'package', key: '' });
+    onClose();
+    window.location.reload();
   };
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 px-4 py-10">
-      <div className="relative w-full max-w-lg rounded-3xl border border-slate-800/70 bg-slate-900/95 p-8 shadow-2xl">
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <h3 className="text-2xl font-semibold text-white">Adicionar monitoramento</h3>
-            <p className="mt-2 text-sm text-slate-300">
-              Defina os parâmetros para acompanhar em tempo real um novo mercado ou partida.
-            </p>
-          </div>
-          <Button type="button" variant="ghost" size="icon" aria-label="Fechar" onClick={onClose}>
-            x
-          </Button>
-        </div>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+          />
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="fixed left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg z-50 p-4"
+          >
+            <div className="glass-effect rounded-2xl p-6 border border-white/20">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold gradient-text">Novo Monitoramento</h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onClose}
+                  className="hover:bg-white/10"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-2">
-            <Label htmlFor="match">Partida ou evento</Label>
-            <Input
-              id="match"
-              name="match"
-              placeholder="Ex.: Corinthians x Palmeiras"
-              value={formState.match}
-              onChange={handleChange}
-              required
-            />
-          </div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <Label htmlFor="name" className="text-blue-200 mb-2 block">
+                    Nome do Monitoramento
+                  </Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Ex: Pedido Amazon #12345"
+                    className="bg-white/5 border-white/10 text-white placeholder:text-blue-200/40"
+                  />
+                </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="market">Mercado</Label>
-            <Input
-              id="market"
-              name="market"
-              placeholder="Ex.: Ambas marcam, total de gols..."
-              value={formState.market}
-              onChange={handleChange}
-              required
-            />
-          </div>
+                <div>
+                  <Label className="text-blue-200 mb-3 block">Tipo de Monitoramento</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {monitorTypes.map((type) => {
+                      const Icon = type.icon;
+                      return (
+                        <button
+                          key={type.id}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, type: type.id })}
+                          className={`p-4 rounded-xl border-2 transition-all ${
+                            formData.type === type.id
+                              ? 'border-primary bg-primary/20'
+                              : 'border-white/10 bg-white/5 hover:bg-white/10'
+                          }`}
+                        >
+                          <Icon className="w-6 h-6 mx-auto mb-2" />
+                          <span className="text-sm">{type.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="threshold">Trigger desejado</Label>
-            <Input
-              id="threshold"
-              name="threshold"
-              placeholder="Ex.: Probabilidade maior que 65%"
-              value={formState.threshold}
-              onChange={handleChange}
-            />
-          </div>
+                <div>
+                  <Label htmlFor="key" className="text-blue-200 mb-2 block">
+                    Chave de Identificação
+                  </Label>
+                  <Input
+                    id="key"
+                    value={formData.key}
+                    onChange={(e) => setFormData({ ...formData, key: e.target.value })}
+                    placeholder="Ex: BR123456789BR ou CPF"
+                    className="bg-white/5 border-white/10 text-white placeholder:text-blue-200/40"
+                  />
+                </div>
 
-          <div className="flex items-center justify-end gap-3">
-            <Button type="button" variant="ghost" onClick={onClose}>
-              Cancelar
-            </Button>
-            <Button type="submit">Criar monitoramento</Button>
-          </div>
-        </form>
-      </div>
-    </div>
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary-hover"
+                >
+                  Adicionar Monitoramento
+                </Button>
+              </form>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 };
 
