@@ -57,7 +57,7 @@
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover: scale-105 hover:shadow-2xl hover:shadow-primary/20;
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20;
   }
 }
 
