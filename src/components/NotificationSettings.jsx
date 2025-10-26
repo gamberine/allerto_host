@@ -55,7 +55,14 @@ const NotificationSettings = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg z-50 p-4"
+            className="
+    fixed 
+    left-0 top-[2dvh] 
+    w-[80dvw] max-w-[80dvw] 
+    z-50 p-4
+    -translate-x-0 -translate-y-0 
+    xl:left-1/2 xl:top-0 xl:-translate-x-1/2 xl:-translate-y-1/2 xl:w-full xl:max-w-lg
+  "
           >
             <div className="glass-effect rounded-2xl p-6 border border-white/20">
               <div className="flex items-center justify-between mb-6">
