@@ -81,18 +81,20 @@ const AddMonitorModal = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             className="
-    fixed 
-    left-0 top-[2dvh] 
-    w-[80dvw] max-w-[80dvw] 
-    z-50 p-4
-    -translate-x-0 -translate-y-0 
-    xl:left-1/2 xl:top-0 xl:-translate-x-1/2 xl:-translate-y-1/2 xl:w-full xl:max-w-lg
-  "
+              fixed 
+              left-0 sm:left-0 lg:left-1/2 
+              top-[2dvh] lg:top-0 
+              -translate-x-0 lg:-translate-x-1/2 
+              -translate-y-0 lg:-translate-y-1/2 
+              w-full max-w-[80dvw] sm:max-w-[70dvw] lg:max-w-md xl:max-w-lg 
+              z-50 p-4
+            "
           >
             <div className="glass-effect rounded-2xl p-6 border border-white/20">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold gradient-text">Novo Monitoramento</h2>
+                <h2 className="text-2xl font-bold gradient-text">Add Novo Monitoramento</h2>
                 <Button
                   variant="ghost"
                   size="icon"
