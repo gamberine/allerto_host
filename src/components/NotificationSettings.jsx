@@ -75,7 +75,7 @@ const NotificationSettings = ({ isOpen, onClose }) => {
               {/* Cabeçalho */}
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-red-500">
-                  Configurações de Notificação
+                  Ver Configurações de Notificação
                 </h2>
                 <Button
                   variant="ghost"
