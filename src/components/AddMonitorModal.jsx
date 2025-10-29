@@ -428,15 +428,9 @@ const AddMonitorModal = ({ isOpen, onClose }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 20 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="
-              fixed
-              left-0 lg:left-1/2
-              top-[2dvh] lg:top-1/2
-              -translate-x-0 lg:-translate-x-1/2
-              -translate-y-0 lg:-translate-y-1/2
-              w-full max-w-[92vw] sm:max-w-3xl lg:max-w-4xl
-              z-50 p-4
-            "
+            class="fixed top-[5%] inset-0 flex justify-center z-50 p-4 mx-auto overflow-hidden transform-none max-w-[92%] sm:max-w-3xl lg:max-w-4xl lg:max-h-[88%] h-auto"
+
+
           >
             <div className="glass-effect rounded-2xl p-6 lg:p-8 border border-white/15 shadow-xl">
               <div className="flex items-start justify-between gap-4 mb-8">
@@ -462,7 +456,7 @@ const AddMonitorModal = ({ isOpen, onClose }) => {
                 </Button>
               </div>
 
-              <section className="space-y-6">
+              <section className="space-y-6 rounded-2xl overflow-y-auto h-auto max-h-[76%]">
                 <div>
                   <Label className="text-sm text-blue-100/80 mb-3 block">
                     Vamos criar...
@@ -476,11 +470,10 @@ const AddMonitorModal = ({ isOpen, onClose }) => {
                           key={option.id}
                           type="button"
                           onClick={() => setSelectedType(option.id)}
-                          className={`flex flex-col items-start gap-3 rounded-xl border px-4 py-4 text-left transition-all ${
-                            isActive
-                              ? 'border-primary bg-primary/10 shadow-lg shadow-primary/20'
-                              : 'border-white/10 bg-white/5 hover:bg-white/10'
-                          }`}
+                          className={`flex flex-col items-start gap-3 rounded-xl border px-4 py-4 text-left transition-all ${isActive
+                            ? 'border-primary bg-primary/10 shadow-lg shadow-primary/20'
+                            : 'border-white/10 bg-white/5 hover:bg-white/10'
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <span className="rounded-lg bg-white/10 p-2 text-primary">
@@ -532,11 +525,10 @@ const AddMonitorModal = ({ isOpen, onClose }) => {
                                 subcategory: subcategory.id,
                               }))
                             }
-                            className={`flex flex-col gap-2 rounded-xl border px-4 py-4 text-left transition ${
-                              isActive
-                                ? 'border-primary bg-primary/10 shadow-lg shadow-primary/20'
-                                : 'border-white/10 bg-white/5 hover:bg-white/10'
-                            }`}
+                            className={`flex flex-col gap-2 rounded-xl border px-4 py-4 text-left transition ${isActive
+                              ? 'border-primary bg-primary/10 shadow-lg shadow-primary/20'
+                              : 'border-white/10 bg-white/5 hover:bg-white/10'
+                              }`}
                           >
                             <span className="text-sm font-medium text-white">
                               {subcategory.label}
