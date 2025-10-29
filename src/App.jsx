@@ -20,7 +20,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Package, TrendingUp, Wifi, Activity, Plus, Settings } from 'lucide-react';
+import { Bell, Package, TrendingUp, Wifi, Activity, Plus, Settings, ListTodo } from 'lucide-react';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/Header';
 import Dashboard from '@/components/Dashboard';
@@ -28,6 +28,7 @@ import MonitoringList from '@/components/MonitoringList';
 import AddMonitorModal from '@/components/AddMonitorModal';
 import NotificationSettings from '@/components/NotificationSettings';
 import BettingDashboard from '@/components/BettingDashboard';
+import Todo from '@/components/Todo';
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -40,6 +41,10 @@ function App() {
     id: 'monitoring',
     label: 'Monitoramento',
     icon: Bell
+  }, {
+    id: 'todo',
+    label: 'To-do',
+    icon: ListTodo
   }, {
     id: 'betting',
     label: 'Apostas',
@@ -105,6 +110,21 @@ function App() {
             duration: 0.3
           }}>
             <MonitoringList />
+          </motion.div>}
+
+          {activeTab === 'todo' && <motion.div key="todo" initial={{
+            opacity: 0,
+            x: -20
+          }} animate={{
+            opacity: 1,
+            x: 0
+          }} exit={{
+            opacity: 0,
+            x: 20
+          }} transition={{
+            duration: 0.3
+          }}>
+            <Todo />
           </motion.div>}
 
           {activeTab === 'betting' && <motion.div key="betting" initial={{
