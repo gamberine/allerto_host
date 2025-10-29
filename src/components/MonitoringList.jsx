@@ -1,14 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Package, TrendingUp, Wifi, Activity, Trash2, RefreshCw } from 'lucide-react';
+import {
+  Package,
+  TrendingUp,
+  Wifi,
+  Activity,
+  Trash2,
+  RefreshCw,
+  ClipboardList,
+  Sparkles,
+  Bell,
+  Gauge,
+  Settings,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
+
+const monitoramentoIcons = {
+  pedido: Package,
+  protocolo: ClipboardList,
+  sorteio: Sparkles,
+  noticia: Bell,
+};
+
+const monitoramentoLabels = {
+  pedido: 'Pedido/Rastreio',
+  protocolo: 'Protocolo',
+  sorteio: 'Sorteio',
+  noticia: 'Noticia',
+};
+
+const outroLabels = {
+  conectividade: 'Conectividade',
+  velocidade: 'Medir velocidade',
+  ping: 'Medicao de ping',
+};
 
 const MonitoringList = () => {
   const [monitors, setMonitors] = useState([]);
 
   useEffect(() => {
     loadMonitors();
+
+    const handler = () => loadMonitors();
+
+    window.addEventListener('monitoring:refresh', handler);
+    return () => window.removeEventListener('monitoring:refresh', handler);
   }, []);
 
   const loadMonitors = () => {
@@ -27,20 +64,57 @@ const MonitoringList = () => {
     });
   };
 
-  const refreshMonitor = (id) => {
+  const refreshMonitor = () => {
     toast({
-      title: "Atualizando...",
-      description: "🚧 Esta funcionalidade ainda não está implementada—mas não se preocupe! Você pode solicitá-la no próximo prompt! 🚀",
+      title: 'Atualizando...',
+      description: 'Estamos preparando a automacao desta etapa. Conte para a equipe como gostaria de receber esta atualizacao.',
     });
   };
 
-  const getIcon = (type) => {
-    switch (type) {
-      case 'package': return Package;
-      case 'betting': return TrendingUp;
-      case 'connection': return Wifi;
-      default: return Activity;
+  const getIcon = (monitor) => {
+    if (monitor.type === 'monitoramento') {
+      return monitoramentoIcons[monitor.subcategory] || Package;
     }
+
+    if (monitor.type === 'outro') {
+      if (monitor.category === 'conectividade') return Wifi;
+      if (monitor.category === 'velocidade') return Gauge;
+      if (monitor.category === 'ping') return Activity;
+      return Settings;
+    }
+
+    switch (monitor.type) {
+      case 'package':
+        return Package;
+      case 'betting':
+        return TrendingUp;
+      case 'connection':
+        return Wifi;
+      default:
+        return Activity;
+    }
+  };
+
+  const getCategoryLabel = (monitor) => {
+    if (monitor.type === 'monitoramento') {
+      const label = monitoramentoLabels[monitor.subcategory] || 'Personalizado';
+      return `Monitoramento - ${label}`;
+    }
+
+    if (monitor.type === 'outro') {
+      const label = outroLabels[monitor.category] || 'Fluxo especial';
+      return `Outro - ${label}`;
+    }
+
+    if (monitor.type === 'package') {
+      return 'Monitoramento - Pedido/Rastreio';
+    }
+
+    if (monitor.type === 'connection') {
+      return 'Monitoramento - Conexao/Wi-Fi';
+    }
+
+    return monitor.type || 'Monitoramento';
   };
 
   const getStatusColor = (status) => {
@@ -73,7 +147,12 @@ const MonitoringList = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {monitors.map((monitor, index) => {
-          const Icon = getIcon(monitor.type);
+          const Icon = getIcon(monitor);
+          const statusLabel = monitor.status || 'active';
+          const categoryLabel = getCategoryLabel(monitor);
+          const reference = monitor.link || monitor.key;
+          const locationInfo = monitor.details?.location;
+          const contactInfo = monitor.details?.contact;
 
           return (
             <motion.div
@@ -89,23 +168,36 @@ const MonitoringList = () => {
                     <Icon className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-medium">{monitor.name}</h3>
-                    <p className={`text-xs ${getStatusColor(monitor.status)}`}>
-                      {monitor.status}
+                    <h3 className="font-medium text-white">
+                      {monitor.name || categoryLabel}
+                    </h3>
+                    <p className="text-xs text-blue-200/70">{categoryLabel}</p>
+                    <p className={`text-xs ${getStatusColor(statusLabel)}`}>
+                      {statusLabel}
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2 mb-4">
-                <div className="text-sm">
-                  <span className="text-blue-200/60">Tipo: </span>
-                  <span className="text-blue-200">{monitor.type}</span>
-                </div>
-                <div className="text-sm">
-                  <span className="text-blue-200/60">Chave: </span>
-                  <span className="text-blue-200 font-mono text-xs">{monitor.key}</span>
-                </div>
+                {reference && (
+                  <div className="text-sm">
+                    <span className="text-blue-200/60">Referencia: </span>
+                    <span className="text-blue-200 break-all">{reference}</span>
+                  </div>
+                )}
+
+                {locationInfo && (
+                  <div className="text-xs text-blue-200/70">
+                    Local: <span className="text-blue-200">{locationInfo}</span>
+                  </div>
+                )}
+
+                {contactInfo && (
+                  <div className="text-xs text-blue-200/70">
+                    Responsavel: <span className="text-blue-200">{contactInfo}</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-2">
@@ -205,3 +297,4 @@ export default MonitoringList;
 // };
 
 // export default MonitoringList;
+

@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   ClipboardList,
   Filter,
-  ListTodo,
   Search,
   Tag,
   Trash2,
@@ -15,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from '@/components/ui/use-toast';
 
-const STORAGE_KEY = 'allerto_todo_tasks';
+const STORAGE_KEY = 'allerto_tarefas_tasks';
 
 const filterOptions = [
   { value: 'all', label: 'Todas' },
@@ -36,7 +35,7 @@ const createId = () => {
     return crypto.randomUUID();
   }
 
-  return `todo_${Math.random().toString(36).slice(2, 11)}`;
+  return `tarefas_${Math.random().toString(36).slice(2, 11)}`;
 };
 
 const loadTasks = () => {
@@ -66,7 +65,7 @@ const normalizeTags = (raw) =>
 
 const formatTag = (tag) => `#${tag}`;
 
-const Todo = () => {
+const Tarefas = () => {
   const [tasks, setTasks] = useState(() => loadTasks());
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
@@ -78,6 +77,19 @@ const Todo = () => {
     tags: '',
     priority: 'medium',
   });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const handler = () => {
+      setTasks(loadTasks());
+    };
+
+    window.addEventListener('tarefas:refresh', handler);
+    return () => window.removeEventListener('tarefas:refresh', handler);
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -230,7 +242,7 @@ const Todo = () => {
           </p>
         </div>
         <div className="hidden sm:flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-orange-500 text-white shadow-lg shadow-primary/30">
-          <ListTodo className="h-6 w-6" />
+              <ClipboardList className="h-6 w-6" />
         </div>
       </motion.div>
 
@@ -637,5 +649,4 @@ const StatCard = ({ icon, label, value, accent }) => (
   </motion.div>
 );
 
-export default Todo;
-
+export default Tarefas;

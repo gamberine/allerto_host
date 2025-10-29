@@ -20,7 +20,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Package, TrendingUp, Wifi, Activity, Plus, Settings, ListTodo } from 'lucide-react';
+import { Bell, Package, TrendingUp, Wifi, Activity, Plus, Settings, ClipboardList } from 'lucide-react';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/Header';
 import Dashboard from '@/components/Dashboard';
@@ -28,7 +28,7 @@ import MonitoringList from '@/components/MonitoringList';
 import AddMonitorModal from '@/components/AddMonitorModal';
 import NotificationSettings from '@/components/NotificationSettings';
 import BettingDashboard from '@/components/BettingDashboard';
-import Todo from '@/components/Todo';
+import Tarefas from '@/components/Tarefas';
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -42,9 +42,9 @@ function App() {
     label: 'Monitoramento',
     icon: Bell
   }, {
-    id: 'todo',
-    label: 'To-do',
-    icon: ListTodo
+    id: 'tarefas',
+    label: 'Tarefas',
+    icon: ClipboardList
   }, {
     id: 'betting',
     label: 'Apostas',
@@ -112,7 +112,7 @@ function App() {
             <MonitoringList />
           </motion.div>}
 
-          {activeTab === 'todo' && <motion.div key="todo" initial={{
+          {activeTab === 'tarefas' && <motion.div key="tarefas" initial={{
             opacity: 0,
             x: -20
           }} animate={{
@@ -124,7 +124,7 @@ function App() {
           }} transition={{
             duration: 0.3
           }}>
-            <Todo />
+            <Tarefas />
           </motion.div>}
 
           {activeTab === 'betting' && <motion.div key="betting" initial={{
