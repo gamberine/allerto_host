@@ -16,7 +16,7 @@ const Header = ({
         <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center p-0 overflow-hidden">
           <img src={logo} alt="Allerto Logo" className="w-full h-full object-cover" data-edit-id="src/components/Header.jsx:16:13" />
         </div>
-        <span className="text-xl font-bold gradient-text">Allerto</span>
+        <span className="text-xl font-bold gradient-text">Allerto - O alerta certo, no momento certo</span>
       </div>
 
       <Button variant="ghost" size="icon" onClick={onSettingsClick} className="hover:bg-white/10">
